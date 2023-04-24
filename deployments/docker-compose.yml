@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    restart: always
+  kafka1:
+    image: wurstmeister/kafka
+    depends_on: [zookeeper]
+    container_name: kafka1
+    ports:
+      - "9091:9091"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9091
+      KAFKA_CREATE_TOPICS: "hqd8080:1:1"
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9091
+    restart: always
